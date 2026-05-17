@@ -21,6 +21,6 @@ find local gems, and navigate destinations. Be practical, culturally aware, and 
 Never make bookings or guarantee prices—recommend verifying with official sources."""
 )
 
-response = agent("First time in Nairobi, here until Friday. What do locals recommend that tourists usually miss?")
+response = agent("Back in Nairobi, here until Friday. What do locals recommend that tourists usually miss?")
 print(response)
 
