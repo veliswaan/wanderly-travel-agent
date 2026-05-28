@@ -1,7 +1,7 @@
 # Building your first AI agent and deploying it in the cloud
 
-We've been using Strands to build AI agents and add tools to them so here we're going a step further.
-This is a hands-on tutorial that we'll follow to build, deploy, and integrate an AI travel assistant using Strands Agents and Amazon Bedrock AgentCore.
+We've been using Strands to build AI agents and add tools to them, with this tutorial, we're going a step further.
+This is a hands-on tutorial that we'll follow to build, deploy, and integrate an AI travel assistant using Strands Agents to build the agent and Amazon Bedrock AgentCore to deploy it to production (AWS account).
 
 **Duration:** 2-3 hours  
 **Difficulty:** Beginner to Intermediate  
@@ -27,11 +27,11 @@ This is a hands-on tutorial that we'll follow to build, deploy, and integrate an
 
 ### What to know about AWS billing
 
-Most of us hesitate to create an AWS account because we fear the unexpected bill.
+Most of us hesitate to create an AWS account because we fear the unexpected bill. I understand this fear, so below I walk you through a few setups to help you prevent getting this unexpected bill.
 
-For **new AWS accounts**; when you create a new AWS account [you get $100-200 in free AWS credits](https://aws.amazon.com/free/) that CAN be used for Amazon Bedrock. This means you can likely complete this entire tutorial **for free** using AWS credits.
+For **new AWS accounts**; when you create a new AWS account [you get $100-200 in free AWS credits](https://aws.amazon.com/free/) and these credits CAN be used for Amazon Bedrock. This means you can likely complete this entire tutorial **for free** using AWS credits.
 
-### How much will this tutorial cost you
+### How much will this tutorial cost you (if you don't have AWS credits)
 
 Without AWS credits, using the Amazon Nova Pro model in Amazon Bedrock, this tutorial will cost as follows:
 
@@ -41,10 +41,10 @@ Without AWS credits, using the Amazon Nova Pro model in Amazon Bedrock, this tut
 
 ### How to protect yourself from surprise bills
 
-1. **Start with a budget cap** of $10-20 for learning
-2. **Set up a billing alarm** (we'll do this below)
-3. **Use your free AWS credits** new accounts get $100-200
-4. **Clean up resources** when you're done (we'll remind you)
+1. **Start with a budget cap** of $10-20 for learning (see "Set up a billing alarm (important!)" section below)
+2. **Set up a billing alarm** (see "Set up a billing alarm (important!)" section below)
+3. **Use your free AWS credits** new accounts get $100-200 or AWS credits will be provided at the session
+4. **Clean up resources** when you're done (see "9. Cleanup & Cost Management" section at the end of this tutorial)
 
 ### Prerequisites (What you'll need)
 
@@ -71,7 +71,7 @@ pip install strands-agents bedrock-agentcore bedrock-agentcore-starter-toolkit b
 
 ### Set up a billing alarm (important!)
 
-Setting up a billing alarm protects you from unexpected charges:
+A good practice as soon as you create your AWS account is to set up a billing alarm to protect yourself from unexpected charges:
 
 1. Sign in to the [AWS Console](https://console.aws.amazon.com)
 2. Search for **"Billing"** in the top search bar
@@ -87,22 +87,20 @@ Now you'll get an email if your spending approaches your limit.
 
 ### Enable Amazon Bedrock Model Access
 
-Before you can use AI models, you need to enable access. Most Bedrock models grant access instantly with a single click — no forms, no waiting. We're using **Amazon Nova Pro** for this workshop because it's first-party AWS (owned by AWS), supports tool use well, and is granted instantly.
+Before you can use AI models, you need to enable access. We're using **Amazon Nova Pro** for this workshop because it's first-party AWS (owned by AWS), supports tool use well, and access is granted instantly.
 
-> **Note:** Anthropic's Claude models on Bedrock require submitting a use-case form on first use. We're skipping that path so the workshop runs smoothly. The code we write is model-agnostic — you can swap to Claude later once you have access.
-
-1. In the AWS Console, search for **"Amazon Bedrock"** and click on it
+1. In the AWS Console, search for **"Amazon Bedrock"** then click on it
 2. Make sure your region is set to **us-east-1** (top-right of the console)
 3. In the left sidebar, expand **"Test"** and click **"Chat / Text playground"** (or just **"Playground"**)
 4. Click **"Select model"**
 5. Choose **Amazon** as the provider, then select **Nova Pro**
-6. Access is granted immediately — no form to fill out
+6. Access is granted immediately.
 
 **Tip:** Try a quick test prompt in the playground (e.g., "Hello!") to confirm the model is working before moving on.
 
 ### Create an IAM User for development
 
-For security, avoid using your root account for development:
+Another best practice as soon as you create your AWS account is to avoid using your root account for development, for security reasons. Here's how to create an IAM user so that you use this instead:
 
 1. Search for **"IAM"** in the AWS Console
 2. Click **"Users"** in the left sidebar
@@ -130,7 +128,7 @@ Your code needs to know your AWS credentials. boto3 (used by Strands Agents and 
    ```
    C:\Users\YOUR_USERNAME
    ```
-2. Create a new folder called `.aws` (note the leading dot)
+2. If it doesn't already exist, create a new folder called `.aws` (note the leading dot). Here we'll ultimately save both our   **config** and **credentials** files which we'll create/update below.
    - Tip: in File Explorer, right-click → New → Folder → name it `.aws.` (Windows will trim the trailing dot for you)
 3. Open **Notepad** and paste the following, replacing the placeholders with your access key and secret key from Step 1.5:
 
@@ -165,7 +163,7 @@ That's it — boto3 will pick these up automatically.
 
 > **Mac/Linux users:** Create the same two files at `~/.aws/credentials` and `~/.aws/config` using any text editor.
 
-You're now ready to build your first agent!
+You're now ready to build your first agent, yay!!
 
 ---
 
@@ -224,7 +222,6 @@ python simple_agent.py
 4. We asked it a question and printed the response
 
 That's it! You've built an AI agent in about 15 lines of code.
-
 
 ## 3. Phase 2: Adding tools
 
@@ -325,14 +322,14 @@ python agent_with_tools.py
 
 ### What's different?
 
-The magic is in the `@tool` decorator. When you ask about weather, budget, and attractions, the agent **automatically decides** to:
+The `@tool` decorator is the star of the show here. When you ask about weather, budget, and attractions, the agent **automatically decides** to:
 
 1. Call `get_weather("Cape Town")`
 2. Call `search_attractions("Cape Town")`  
 3. Call `estimate_budget("Cape Town", 3, "mid-range")`
 4. Combine all the information into a helpful response
 
-You didn't write any orchestration logic — the agent figures it out!
+You didn't write any orchestration logic — the agent figures it out, thanks to the tools!
 
 ---
 
@@ -343,7 +340,7 @@ Now let's prepare our agent to run in the cloud on [Amazon Bedrock AgentCore](ht
 
 ### 4.1: Make agent_with_tools.py cloud-ready
 
-Now let's add a few small additions to the `agent_with_tools.py` we built in Phase 2. This keeps things simple — same agent, same tools, just a few extra pieces so AgentCore knows how to call it.
+Now let's add a few small additions to the `agent_with_tools.py` we built in Phase 2. This keeps things simple — same agent, same tools, just a few extra pieces so AgentCore knows how to call your agent.
 
 Open `agent_with_tools.py` and make these three changes:
 
@@ -418,7 +415,7 @@ if __name__ == "__main__":
     app.run()
 ```
 
-That's it. Your `agent_with_tools.py` is now cloud-ready — same tools, same Wanderly personality, but now it can run inside an AgentCore container in AWS.
+That's it. Your `agent_with_tools.py` is now ready to be deployed in the cloud — same tools, same Wanderly personality, but now it can run inside an AgentCore container in AWS.
 
 > **Why is the agent wrapped in `get_agent()` here when it wasn't before?**
 >
@@ -457,7 +454,7 @@ bedrock-agentcore
 
 ## 5. Phase 4: Deploying to AWS
 
-This is the exciting part — taking your local agent and deploying it to AWS! Follow these steps carefully.
+This is the exciting part, taking your local agent and deploying it to AWS! Follow these steps carefully.
 
 ### 5.1: Find the AgentCore CLI
 
