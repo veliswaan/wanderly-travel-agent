@@ -2,7 +2,7 @@
 
 A progressive demo showing how to build, enhance, and deploy an AI travel assistant using [Strands Agents](https://strandsagents.com/) and [Amazon Bedrock AgentCore](https://docs.aws.amazon.com/bedrock-agentcore/).
 
-Built for **AgentCon 2026 Kenya** 🇰🇪
+Built for **AgentCon 2026 Kenya**
 
 ## What You'll Learn
 
@@ -124,5 +124,3 @@ For deployment, your IAM user needs:
 MIT
 
 ---
-
-Built with ❤️ for the developer community in Kenya
