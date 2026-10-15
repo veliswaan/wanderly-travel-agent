@@ -167,9 +167,7 @@ cd wanderly-travel-agent
 Create a new file called simple_agent.py and add this code:
 
 ```
-### ============================================================
 ### Phase 1: The Simplest Possible Agent
-### ============================================================
 
 from strands import Agent
 from strands.models import BedrockModel
@@ -220,9 +218,7 @@ A chatbot that only talks is limited. Let's give our agent tools which are funct
 Define any Python function as a tool by using the @tool decorator. Function decorated tools can be placed anywhere in your codebase and imported in to your agent’s list of tools. So, create a new file called agent_with_tools.py:
 
 ```
-### ============================================================
 ### Phase 2: Agent with Tools
-### ============================================================
 
 from strands import Agent, tool
 from strands.models import BedrockModel
@@ -318,8 +314,6 @@ The @tool decorator is the star of the show here. When you ask about weather, bu
 Now let's prepare our agent to run in the cloud on Amazon Bedrock AgentCore. This requires a few modifications to make our code "cloud-ready."
 
 Amazon Bedrock AgentCore is a fully modular, secure, serverless platform for agents — you'll deploy to its **Runtime**, but it also provides memory, identity, gateways, built-in tools, observability and evaluations as you grow. Here's the full picture:
-
-
 
 ![Amazon Bedrock AgentCore — components across Build, Deploy and Assess](agentcore_all_components_final.png)
 
