@@ -227,9 +227,7 @@ Define any Python function as a tool by using the @tool decorator. Function deco
 from strands import Agent, tool
 from strands.models import BedrockModel
 
-### ============================================================
-### TOOLS: Functions the agent can call autonomously
-### ============================================================
+### TOOLS: These are functions the agent can call autonomously
 
 @tool
 def get_weather(city: str) -> str:
@@ -276,10 +274,7 @@ def estimate_budget(city: str, days: int, style: str = "mid-range") -> str:
     total = daily * days
     return f"Estimated {style} budget for {days} days in {city}: ${total} (${daily}/day)"
 
-
-### ============================================================
 ### AGENT: Same Wanderly personality, now with superpowers!
-### ============================================================
 
 model = BedrockModel(model_id="us.amazon.nova-pro-v1:0")
 
@@ -293,9 +288,7 @@ Use your tools to provide accurate, real-time information when available.""",
     tools=[get_weather, search_attractions, estimate_budget]
 )
 
-### ============================================================
 ### The agent AUTONOMOUSLY decides which tools to call!
-### ============================================================
 
 response = agent("I'm planning 3 days in Cape Town on a mid-range budget. What's the weather like and what should I see?")
 print(response)
@@ -609,18 +602,15 @@ Now let's build a real application that uses your deployed agent!
 Create a new file called fullstack_integration.py:
 
 ```
-### ============================================================
-### Full Stack Integration: Calling Your Deployed Agent
-### ============================================================
+### AGENT: Same Wanderly personality, now with superpowers!
 
 import json
 import uuid
 import os
 from flask import Flask, request, jsonify, render_template_string
 
-### ============================================================
 ### CONFIGURATION - Set via environment variable
-### ============================================================
+
 AGENT_RUNTIME_ARN = os.environ.get("AGENT_RUNTIME_ARN", "")
 AWS_REGION = os.environ.get("AWS_REGION", "us-east-1")
 
