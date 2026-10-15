@@ -167,17 +167,17 @@ cd wanderly-travel-agent
 Create a new file called simple_agent.py and add this code:
 
 ```
-# ============================================================
-# Phase 1: The Simplest Possible Agent
-# ============================================================
+### ============================================================
+### Phase 1: The Simplest Possible Agent
+### ============================================================
 
 from strands import Agent
 from strands.models import BedrockModel
 
-# Model selection is flexible - swap this out for any supported provider:
-#   model = OpenAIModel(model_id="gpt-4o")           # OpenAI
-#   model = AnthropicModel(model_id="claude-sonnet-4-6")  # Anthropic Direct
-#   model = OllamaModel(model_id="llama3")           # Local/Free
+### Model selection is flexible - swap this out for any supported provider:
+###   model = OpenAIModel(model_id="gpt-4o")           # OpenAI
+###   model = AnthropicModel(model_id="claude-sonnet-4-6")  # Anthropic Direct
+###   model = OllamaModel(model_id="llama3")           # Local/Free
 
 model = BedrockModel(model_id="us.amazon.nova-pro-v1:0")
 
@@ -220,16 +220,16 @@ A chatbot that only talks is limited. Let's give our agent tools which are funct
 Define any Python function as a tool by using the @tool decorator. Function decorated tools can be placed anywhere in your codebase and imported in to your agent’s list of tools. So, create a new file called agent_with_tools.py:
 
 ```
-# ============================================================
-# Phase 2: Agent with Tools
-# ============================================================
+### ============================================================
+### Phase 2: Agent with Tools
+### ============================================================
 
 from strands import Agent, tool
 from strands.models import BedrockModel
 
-# ============================================================
-# TOOLS: Functions the agent can call autonomously
-# ============================================================
+### ============================================================
+### TOOLS: Functions the agent can call autonomously
+### ============================================================
 
 @tool
 def get_weather(city: str) -> str:
@@ -277,9 +277,9 @@ def estimate_budget(city: str, days: int, style: str = "mid-range") -> str:
     return f"Estimated {style} budget for {days} days in {city}: ${total} (${daily}/day)"
 
 
-# ============================================================
-# AGENT: Same Wanderly personality, now with superpowers!
-# ============================================================
+### ============================================================
+### AGENT: Same Wanderly personality, now with superpowers!
+### ============================================================
 
 model = BedrockModel(model_id="us.amazon.nova-pro-v1:0")
 
@@ -293,9 +293,9 @@ Use your tools to provide accurate, real-time information when available.""",
     tools=[get_weather, search_attractions, estimate_budget]
 )
 
-# ============================================================
-# The agent AUTONOMOUSLY decides which tools to call!
-# ============================================================
+### ============================================================
+### The agent AUTONOMOUSLY decides which tools to call!
+### ============================================================
 
 response = agent("I'm planning 3 days in Cape Town on a mid-range budget. What's the weather like and what should I see?")
 print(response)
@@ -397,7 +397,7 @@ def invoke(payload):
     return str(response)
 
 
-# Required for AgentCore
+### Required for AgentCore
 if __name__ == "__main__":
     app.run()
 
@@ -609,18 +609,18 @@ Now let's build a real application that uses your deployed agent!
 Create a new file called fullstack_integration.py:
 
 ```
-# ============================================================
-# Full Stack Integration: Calling Your Deployed Agent
-# ============================================================
+### ============================================================
+### Full Stack Integration: Calling Your Deployed Agent
+### ============================================================
 
 import json
 import uuid
 import os
 from flask import Flask, request, jsonify, render_template_string
 
-# ============================================================
-# CONFIGURATION - Set via environment variable
-# ============================================================
+### ============================================================
+### CONFIGURATION - Set via environment variable
+### ============================================================
 AGENT_RUNTIME_ARN = os.environ.get("AGENT_RUNTIME_ARN", "")
 AWS_REGION = os.environ.get("AWS_REGION", "us-east-1")
 
@@ -681,7 +681,7 @@ def home():
     return render_template_string(HTML_TEMPLATE)
 
 
-# Chat interface HTML (included in the file for simplicity)
+### Chat interface HTML (included in the file for simplicity)
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
@@ -789,19 +789,19 @@ Let's put your code to GitHub and deploy the web app to AWS Amplify for public a
 Create a .gitignore file to exclude sensitive files:
 
 ```
-# Python
+### Python
 __pycache__/
 *.py[cod]
 venv/
 
-# AgentCore generated files (contain your account ID)
+### AgentCore generated files (contain your account ID)
 .bedrock_agentcore/
 .bedrock_agentcore.yaml
 
-# Environment files (contain secrets)
+### Environment files (contain secrets)
 .env
 
-# Build artifacts
+### Build artifacts
 *.zip
 
 ```
