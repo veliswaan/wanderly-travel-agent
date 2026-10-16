@@ -85,24 +85,19 @@ Before you can use AI models, [you need to enable access](https://docs.aws.amazo
 
 ### Create an IAM User for development
 
-Another best practice as soon as you create your AWS account is to avoid using your root account for development, for security reasons. Here's how to create an IAM user so that you use this instead:
+Best practice: don't build with your root account. Instead, create a dedicated IAM user.
 
-1. Search for "IAM" in the AWS Console
-2. Click "Users" in the left sidebar
-3. Click "Create user"
-4. Name it something like dev-user
-5. Click "Next"
-6. Select "Attach policies directly"
-7. Search and attach these policies:- AmazonBedrockFullAccess
-- AmazonEC2ContainerRegistryFullAccess
-- AWSCodeBuildAdminAccess
-- AmazonS3FullAccess
-- IAMFullAccess
-8. Click "Next", then "Create user"
-9. Click on your new user, go to "Security credentials"
-10. Click "Create access key"
-11. Choose "Command Line Interface (CLI)"
-12. Save your Access Key ID and Secret Access Key somewhere safe!
+In the AWS Console, go to **IAM → Users → Create user**, name it `dev-user`, and on the permissions step choose **Attach policies directly** then attach these five managed policies:
+
+- `AmazonBedrockFullAccess` — call models
+- `AmazonEC2ContainerRegistryFullAccess` — store the deploy container
+- `AWSCodeBuildAdminAccess` — build it in the cloud
+- `AmazonS3FullAccess` — hold build artifacts
+- `IAMFullAccess` — let AgentCore create its roles
+
+Finish creating the user, then open it → **Security credentials → Create access key → Command Line Interface (CLI)**. Save your **Access Key ID** and **Secret Access Key** somewhere safe — you'll need them next.
+
+> These are broad, convenient permissions for a learning account. for anything beyond this or any other tutorial, scope them down to least-privilege.
 
 ### Configure AWS credentials
 
@@ -113,7 +108,7 @@ C:\Users\YOUR_USERNAME
 
 ```
 2. If it doesn't already exist, locally on your laptop, create a new folder called .aws (note the leading dot). Here we'll ultimately save both our config and credentials files which we'll create/update below.- Tip: in File Explorer, right-click → New → Folder → name it .aws. (Windows will trim the trailing dot for you)
-3. Open Notepad and paste the following, replacing the placeholders with your access key and secret key from Step 1.5:```
+3. Open Notepad and paste the following, replacing the placeholders with your access key and secret key from the previous step:```
 [default]
 aws_access_key_id = YOUR_ACCESS_KEY_ID
 aws_secret_access_key = YOUR_SECRET_ACCESS_KEY
@@ -136,7 +131,7 @@ C:\Users\YOUR_USERNAME\.aws\config
 
 ```
 
-That's it — boto3 will pick these up automatically.
+That's it! boto3 will pick these up automatically.
 
 > Mac/Linux users: Create the same two files at ~/.aws/credentials and ~/.aws/config using any text editor. You're now ready to build your first agent, yay!!
 
@@ -276,6 +271,7 @@ print(response)
 
 ### 3.2: Run the agent with tools
 
+In the command prompt, run the following command:
 ```
 python agent_with_tools.py
 
