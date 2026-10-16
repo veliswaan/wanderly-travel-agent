@@ -8,7 +8,7 @@ This is a hands-on tutorial that we'll follow to build, deploy, and integrate an
 > **How this tutorial is structured.** This tutorial runs in **phases that build on each other** — Phase 1 (your first agent) → Phase 2 (tools) → Phase 3–5 (prepare & deploy to the cloud) → Phase 6–7 (full-stack app & ship). You can stop after any phase and still have something that works: Phase 1 alone gives you a working agent; if you take it all the way to Phase 5 it's running in the cloud; all the way to then end, your agent has been integrated into a deployed web app.
 
 > **A note on Strands.** [Strands Agents](https://strandsagents.com/) is an open source toolkit for building
-production agents. We build the agent **locally with the Strands Agents SDK** here because that's the best way to learn how an agent works.
+production agents. We build the agent **locally with the Strands Agents SDK** here because that's the best way to learn how an agent works. At a later stage, once we've learned the fundamentals, we'll move on to other features such as the Strands harness and more.
 
 ---
 
@@ -66,7 +66,7 @@ pip install strands-agents bedrock-agentcore bedrock-agentcore-starter-toolkit b
 
 ### Create your AWS account
 
-[AWS launched a new experience in September 2026](https://aws.amazon.com/about-aws/whats-new/2026/09/New-AWS-Builder-Experience/). With this new experience, when you sign up for an AWS account, you can use your existing Google, GitHub, Apple, or Amazon credentials. For most new customers, no credit card is required and you will receive up to $200 in free credits as part of the AWS Free Tier. When your project grows beyond the free credits, you can set a spend limit so you stay within your budget on the paid plan. If you grow to need additional customization, you can activate advanced AWS features to access the full breadth and depth of AWS without migrating.
+[AWS launched a new experience in September 2026](https://aws.amazon.com/about-aws/whats-new/2026/09/New-AWS-Builder-Experience/). With this new experience, when you sign up for an AWS account, you can use your existing Google, GitHub, Apple, or Amazon credentials. For most new customers, no credit card is required and you will receive up to $200 in free credits as part of the AWS Free Tier. 
 
 ### Going beyond AWS credits - upgrading to a Paid Plan
 
@@ -81,7 +81,7 @@ Before you can use AI models, [you need to enable access](https://docs.aws.amazo
 3. In the left sidebar, expand "Test" and click "Chat / Text playground" (or just "Playground")
 4. Click "Select model"
 5. Choose Amazon as the provider, then select Nova Pro
-6. Access is granted immediately. Tip: Try a quick test prompt in the playground (e.g., "Hello!") to confirm the model is working before moving on.
+6. Access is granted immediately. **Tip:** Try a quick test prompt in the playground (e.g., "Hello!") to confirm the model is working before moving on.
 
 ### Create an IAM User for development
 
@@ -163,11 +163,6 @@ Create a new file called simple_agent.py and add this code:
 from strands import Agent
 from strands.models import BedrockModel
 
-#### Model selection is flexible - swap this out for any supported provider:
-#### model = OpenAIModel(model_id="gpt-4o")           # OpenAI
-#### model = AnthropicModel(model_id="claude-sonnet-4-6")  # Anthropic Direct
-#### model = OllamaModel(model_id="llama3")           # Local/Free
-
 model = BedrockModel(model_id="us.amazon.nova-pro-v1:0")
 
 agent = Agent(
@@ -181,6 +176,7 @@ response = agent("First time in Cape Town, here until next Monday. What do local
 print(response)
 
 ```
+**Note:** Model selection is flexible - swap this out for any supported provider: model = OpenAIModel(model_id="gpt-4o")        for OpenAI, model = AnthropicModel(model_id="claude-sonnet-4-6") for Anthropic Direct, or model = OllamaModel(model_id="llama3") for a local/free deployment on your laptop.
 
 ### 2.3: Run your first agent
 
@@ -196,13 +192,9 @@ python simple_agent.py
 3. We created an agent with a personality (the system prompt)
 4. We asked it a question and printed the response That's it! You've built an AI agent in about 15 lines of code.
 
-> **Heads-up — the Harness (for later).** What you just built here using the Strands SDK (model + prompt + loop) is exactly what the [Strands Harness](https://strandsagents.com/docs/user-guide/harness/) gives you pre-built in a single import, with benchmarked defaults for tools, memory, sessions and context management. You don't need it for this tutorial — building it yourself is the lesson — but it's good to know it exists for when you want production defaults fast.
-
 ## 3. Phase 2: Adding tools
 
 In Phase 1 we built a simple agent and we ran it. Now, we want to give our agent even more super powers. In this Phase 2, we give our agent tools which are functions it can call to do even more stuff for us :).
-
-> **Heads-up:** the Strands Harness already ships common **vended tools** (e.g. `web_fetch`, `python_repl`), so you don't always have to hand-write them. We define our own (called "custom tools") with the `@tool` decorator below because that's the skill worth learning here.
 
 ### 3.1: Create agent_with_tools.py
 
