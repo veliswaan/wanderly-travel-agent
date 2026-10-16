@@ -103,21 +103,27 @@ Finish creating the user, then open it → **Security credentials → Create acc
 
 Your code needs to know your AWS credentials. boto3 (used by Strands Agents and the AgentCore toolkit) reads them from two plain-text files in your home folder. We'll update them in Notepad.
 
-1. Open File Explorer and navigate to your user folder:```
+1. Open File Explorer and navigate to your user folder:
+```
 C:\Users\YOUR_USERNAME
 
 ```
 2. If it doesn't already exist, locally on your laptop, create a new folder called .aws (note the leading dot). Here we'll ultimately save both our config and credentials files which we'll create/update below.- Tip: in File Explorer, right-click → New → Folder → name it .aws. (Windows will trim the trailing dot for you)
-3. Open Notepad and paste the following, replacing the placeholders with your access key and secret key from the previous step:```
+3. Open Notepad and paste the following, replacing the placeholders with your access key and secret key from the previous step:
+
+```
 [default]
 aws_access_key_id = YOUR_ACCESS_KEY_ID
 aws_secret_access_key = YOUR_SECRET_ACCESS_KEY
 
 ```
+
 4. Save the file as credentials (no file extension) inside the .aws folder:- In Notepad's Save dialog, change "Save as type" to "All Files (.)"
 - Filename: credentials
 - Save it in C:\Users\YOUR_USERNAME.aws\
-5. Open a fresh Notepad window and paste:```
+5. Open a fresh Notepad window and paste:
+
+```
 [default]
 region = us-east-1
 output = json
