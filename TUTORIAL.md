@@ -1,9 +1,14 @@
 # Building your first AI agent and deploying it in the cloud
 
-This is a hands-on tutorial that we'll follow to build, deploy, and integrate an AI travel assistant (or any agent of your choice) using Strands Agents to build the agent and Amazon Bedrock AgentCore to deploy it to production (AWS account). Duration: 2-3 hours Difficulty: Beginner to Intermediate What you'll build: Wanderly (or any agent of your choice), an AI travel assistant that runs in the cloud
+This is a hands-on tutorial that we'll follow to build, deploy, and integrate an AI travel assistant using Strands Agents to build the agent and Amazon Bedrock AgentCore to deploy it to production (AWS account). Note that although we're building an AI travel assistant here, you can follow this tutorial to build any other AI agent of your choice.
+**Duration:** 2-3 hours 
+**Difficulty:** Beginner to Intermediate 
+**What you'll build:** Wanderly (or any agent of your choice), an AI travel assistant that runs in the cloud
 
-> **How this tutorial is structured.** It runs in **phases that build on each other** — Phase 1 (your first agent) → Phase 2 (tools) → Phase 3–5 (prepare & deploy to the cloud) → Phase 6–7 (full-stack app & ship). You can stop after any phase and still have something that works: Phase 1 alone gives you a working agent; through Phase 5 it's running in the cloud; all the way through, it's a deployed web app.
-> **A note on Strands.** Strands Agents is now 1.0 and production-ready. We build the agent **by hand with the Strands Agents SDK** here because that's the best way to learn how an agent works — and we'll point out the newer **Strands Harness** (a fully-assembled agent in one import) where it's relevant.
+> **How this tutorial is structured.** This tutorial runs in **phases that build on each other** — Phase 1 (your first agent) → Phase 2 (tools) → Phase 3–5 (prepare & deploy to the cloud) → Phase 6–7 (full-stack app & ship). You can stop after any phase and still have something that works: Phase 1 alone gives you a working agent; if you take it all the way to Phase 5 it's running in the cloud; all the way to then end, your agent has been integrated into a deployed web app.
+
+> **A note on Strands.** [Strands Agents](https://strandsagents.com/) is an open source toolkit for building
+production agents. We build the agent **locally with the Strands Agents SDK** here because that's the best way to learn how an agent works.
 
 ---
 
@@ -25,14 +30,14 @@ This is a hands-on tutorial that we'll follow to build, deploy, and integrate an
 
 ### What to know about AWS billing
 
-Most of us hesitate to create an AWS account because we fear the unexpected bill. I understand this fear, so below I walk you through a few setups to help you prevent getting this unexpected bill. For new AWS accounts; when you create a new AWS account you get $100-200 in free AWS credits and these credits CAN be used for Amazon Bedrock. This means you can likely complete this entire tutorial for free using AWS credits.
+We sometimes hesitate to create an AWS account because we fear the unexpected bill. I understand this fear, so below I walk you through a few setups to help you prevent getting this unexpected bill. For new AWS accounts; when you create a new AWS account you get $100-200 in free AWS credits and these credits CAN be used for Amazon Bedrock. This means you can likely complete this entire tutorial for free using AWS credits.
 
 ### How much will this tutorial cost you (if you don't have AWS credits)
 
 Without AWS credits, using the Amazon Nova Pro model in Amazon Bedrock, this tutorial will cost as follows:
 
 - Amazon Bedrock (Amazon Nova Pro): ~$0.0008 per 1,000 input tokens, ~$0.0032 per 1,000 output tokens.
-- For this entire tutorial: Expect to spend $1-5 USD maximum if you follow along and clean up afterwards.
+- For this entire tutorial: Expect to spend $1-5 USD maximum if you follow along *and clean up afterwards.*
 - AgentCore Runtime: Pay only for what you use (per-second billing).
 
 ### How to protect yourself from surprise bills
@@ -61,28 +66,15 @@ pip install strands-agents bedrock-agentcore bedrock-agentcore-starter-toolkit b
 
 ### Create your AWS account
 
-1. Go to [aws.amazon.com](https://aws.amazon.com/)
-2. Click "Create an AWS Account"
-3. Follow the signup process (you'll need a credit card, but won't be charged yet)
-4. Choose the "Basic Support - Free" plan
+[AWS launched a new experience in September 2026](https://aws.amazon.com/about-aws/whats-new/2026/09/New-AWS-Builder-Experience/). With this new experience, when you sign up for an AWS account, you can use your existing Google, GitHub, Apple, or Amazon credentials. For most new customers, no credit card is required and you will receive up to $200 in free credits as part of the AWS Free Tier. When your project grows beyond the free credits, you can set a spend limit so you stay within your budget on the paid plan. If you grow to need additional customization, you can activate advanced AWS features to access the full breadth and depth of AWS without migrating.
 
-### Set up a billing alarm (important!)
+### Going beyond AWS credits - upgrading to a Paid Plan
 
-A good practice as soon as you create your AWS account is to set up a billing alarm to protect yourself from unexpected charges:
-
-1. Sign in to the AWS Console
-2. Search for "Billing" in the top search bar
-3. Click "Billing and Cost Management"
-4. In the left menu, click "Budgets"
-5. Click "Create budget"
-6. Under "Templates - New", choose "Monthly cost budget"
-7. Set your budget amount to $10 (or whatever you're comfortable with)
-8. Add your email address for alerts
-9. Click "Create budget" Now you'll get an email if your spending approaches your limit.
+When you’re ready to move beyond free credits, [you can upgrade to a paid plan by entering your payment method](https://aws.amazon.com/blogs/aws/aws-reimagines-the-getting-started-experience/). You can set a monthly spend limit on a project based on your usage trends, starting at $20 per month. The spend limit is the ceiling for that project’s costs, and you pay for what you actually use up to that amount.
 
 ### Enable Amazon Bedrock Model Access
 
-Before you can use AI models, you need to enable access. We're using Amazon Nova Pro for this workshop because it's first-party AWS (owned by AWS), supports tool use well, and access is granted instantly.
+Before you can use AI models, [you need to enable access](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html). We're using Amazon Nova Pro for this workshop because it's first-party AWS (owned by AWS), supports tool use well, and access is granted instantly.
 
 1. In the AWS Console, search for "Amazon Bedrock" then click on it
 2. Make sure your region is set to us-east-1 (top-right of the console)
@@ -120,7 +112,7 @@ Your code needs to know your AWS credentials. boto3 (used by Strands Agents and 
 C:\Users\YOUR_USERNAME
 
 ```
-2. If it doesn't already exist, create a new folder called .aws (note the leading dot). Here we'll ultimately save both our config and credentials files which we'll create/update below.- Tip: in File Explorer, right-click → New → Folder → name it .aws. (Windows will trim the trailing dot for you)
+2. If it doesn't already exist, locally on your laptop, create a new folder called .aws (note the leading dot). Here we'll ultimately save both our config and credentials files which we'll create/update below.- Tip: in File Explorer, right-click → New → Folder → name it .aws. (Windows will trim the trailing dot for you)
 3. Open Notepad and paste the following, replacing the placeholders with your access key and secret key from Step 1.5:```
 [default]
 aws_access_key_id = YOUR_ACCESS_KEY_ID
@@ -152,7 +144,7 @@ That's it — boto3 will pick these up automatically.
 
 ## 2. Phase 1: Your first agent
 
-Let's start with the simplest possible AI agent. Create a new folder for your project and a file called simple_agent.py.
+Let's start with the simplest possible AI agent. In 2.1 below we create a new folder for your project and in 2.2 we create a file called *simple_agent.py.*
 
 ### 2.1: Create the Project Folder
 
@@ -161,7 +153,6 @@ mkdir wanderly-travel-agent
 cd wanderly-travel-agent
 
 ```
-
 ### 2.2: Create simple_agent.py
 
 Create a new file called simple_agent.py and add this code:
@@ -172,10 +163,10 @@ Create a new file called simple_agent.py and add this code:
 from strands import Agent
 from strands.models import BedrockModel
 
-### Model selection is flexible - swap this out for any supported provider:
-###   model = OpenAIModel(model_id="gpt-4o")           # OpenAI
-###   model = AnthropicModel(model_id="claude-sonnet-4-6")  # Anthropic Direct
-###   model = OllamaModel(model_id="llama3")           # Local/Free
+#### Model selection is flexible - swap this out for any supported provider:
+#### model = OpenAIModel(model_id="gpt-4o")           # OpenAI
+#### model = AnthropicModel(model_id="claude-sonnet-4-6")  # Anthropic Direct
+#### model = OllamaModel(model_id="llama3")           # Local/Free
 
 model = BedrockModel(model_id="us.amazon.nova-pro-v1:0")
 
@@ -205,13 +196,13 @@ python simple_agent.py
 3. We created an agent with a personality (the system prompt)
 4. We asked it a question and printed the response That's it! You've built an AI agent in about 15 lines of code.
 
-> **Heads-up — the Harness (for later).** What you just assembled by hand (model + prompt + loop) is exactly what the [Strands Harness](https://strandsagents.com/docs/user-guide/harness/) gives you pre-built in a single import, with benchmarked defaults for tools, memory, sessions and context management. You don't need it for this tutorial — building it yourself is the lesson — but it's good to know it exists for when you want production defaults fast.
+> **Heads-up — the Harness (for later).** What you just built here using the Strands SDK (model + prompt + loop) is exactly what the [Strands Harness](https://strandsagents.com/docs/user-guide/harness/) gives you pre-built in a single import, with benchmarked defaults for tools, memory, sessions and context management. You don't need it for this tutorial — building it yourself is the lesson — but it's good to know it exists for when you want production defaults fast.
 
 ## 3. Phase 2: Adding tools
 
-A chatbot that only talks is limited. Let's give our agent tools which are functions it can call to get real information.
+In Phase 1 we built a simple agent and we ran it. Now, we want to give our agent even more super powers. In this Phase 2, we give our agent tools which are functions it can call to do even more stuff for us :).
 
-> **Heads-up:** the Strands Harness already ships common **vended tools** (e.g. `web_fetch`, `python_repl`), so you don't always have to hand-write them. We define our own with the `@tool` decorator below because that's the skill worth learning here.
+> **Heads-up:** the Strands Harness already ships common **vended tools** (e.g. `web_fetch`, `python_repl`), so you don't always have to hand-write them. We define our own (called "custom tools") with the `@tool` decorator below because that's the skill worth learning here.
 
 ### 3.1: Create agent_with_tools.py
 
