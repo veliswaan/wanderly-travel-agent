@@ -802,7 +802,9 @@ AWS Amplify can host your Flask app, but for simplicity, let's create a static f
 > Heads up: A static HTML page can't call AgentCore directly (AWS API calls need credential signing). So this static page calls your Flask backend (fullstack_integration.py), which calls AgentCore. To make this work end-to-end you'll need a publicly reachable URL for your Flask app — see Step 8.4 for the easiest way (ngrok).
 
 1. In your local project folder, create a new subfolder called frontend
-2. Inside frontend/, create a file called index.html and paste in this starter:```
+2. Inside frontend/, create a file called index.html and paste in this starter:
+
+```
 <!DOCTYPE html>
 <html lang="en">
 <head>
